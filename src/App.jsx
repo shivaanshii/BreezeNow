@@ -94,7 +94,137 @@ function App() {
   const handleChange = (e) => {
     setCityInfo(e.target.value);
   }
+  const getWeatherInsights = () => {
+  const insights = [];
 
+  if (temperature >= 35) {
+    insights.push({
+      title: "Stay hydrated in high temperatures",
+      description:
+        `Temperatures above ${temperature}°C — drink water regularly and avoid prolonged sun exposure.`,
+      emoji: "🌡️",
+      accent: "yellow",
+    });
+  }
+
+  if (uv >= 6) {
+    insights.push({
+      title: "High UV exposure today",
+      description:
+        `UV index is currently ${uv}. Use sunscreen and avoid excessive sun exposure.`,
+      emoji: "🧴",
+      accent: "yellow",
+    });
+  }
+
+  if (windSpeed >= 25) {
+    insights.push({
+      title: "Strong winds expected outside",
+      description:
+        `Wind speeds at ${windSpeed} KPH — be cautious while traveling outdoors.`,
+      emoji: "💨",
+      accent: "blue",
+    });
+  }
+
+  if (humidity >= 80) {
+    insights.push({
+      title: "High humidity levels today",
+      description:
+        `Humidity is currently ${humidity}% which may make the weather feel warmer.`,
+      emoji: "💧",
+      accent: "cyan",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("rain")
+  ) {
+    insights.push({
+      title: "Carry an umbrella before heading out",
+      description:
+        "Rainy conditions are expected today. Keep an umbrella or raincoat handy.",
+      emoji: "🌧️",
+      accent: "purple",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("sunny") ||
+    condition?.toLowerCase().includes("clear")
+  ) {
+    insights.push({
+      title: "Great weather for outdoor activities",
+      description:
+        "Clear skies and pleasant visibility make this ideal for outdoor plans.",
+      emoji: "☀️",
+      accent: "green",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("overcast") ||
+    condition?.toLowerCase().includes("cloudy")
+  ) {
+    insights.push({
+      title: "Cloudy skies expected today",
+      description:
+        "Dense cloud cover may reduce sunlight throughout the day.",
+      emoji: "☁️",
+      accent: "gray",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("mist") ||
+    condition?.toLowerCase().includes("fog") ||
+    condition?.toLowerCase().includes("haze")
+  ) {
+    insights.push({
+      title: "Reduced visibility outdoors",
+      description:
+        "Mist or fog conditions may affect visibility while driving or traveling.",
+      emoji: "🌫️",
+      accent: "cyan",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("thunder")
+  ) {
+    insights.push({
+      title: "Thunderstorm conditions detected",
+      description:
+        "Take precautions and avoid open areas during thunderstorms.",
+      emoji: "⛈️",
+      accent: "purple",
+    });
+  }
+
+  if (
+    condition?.toLowerCase().includes("snow")
+  ) {
+    insights.push({
+      title: "Snowfall expected today",
+      description:
+        "Cold and snowy conditions may affect travel and outdoor activities.",
+      emoji: "❄️",
+      accent: "blue",
+    });
+  }
+
+  if (temperature <= 10) {
+    insights.push({
+      title: "Cold weather detected",
+      description:
+        "Wear warm clothing and avoid prolonged exposure to cold weather.",
+      emoji: "🧥",
+      accent: "cyan",
+    });
+  }
+
+  return insights.slice(0, 3);
+};
   const ErrorBox = () => {
     return (
       <div className="errorbox">
@@ -104,6 +234,7 @@ function App() {
   }
 
   const WeatherDetail = () => {
+    const insights = getWeatherInsights();
     return (
       <div className="datas flex flex-col items-center justify-center gap-10">
         <div className="imp-datas flex flex-col md:flex-row gap-10">
@@ -157,6 +288,38 @@ function App() {
               </p>
             </div>}
           </div>
+          {insights.length > 0 && (
+          <div className="advisory-section">
+            <div className="advisory-topline">
+              <div className="line"></div>
+              <p>WEATHER INSIGHTS</p>
+              <div className="line"></div>
+            </div>
+
+            <div className="advisory-header">
+              <h2>🌤 Today's Advisory</h2>
+              <p>Based on current weather conditions</p>
+            </div>
+
+            <div className="advisory-grid">
+              {insights.map((insight, index) => (
+                <div
+                  key={index}
+                  className={`advisory-card ${insight.accent}`}
+                >
+                  <div className="advisory-icon">
+                    {insight.emoji}
+                  </div>
+
+                  <div className="advisory-content">
+                    <h3>{insight.title}</h3>
+                    <p>{insight.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         </div>
       </div>
     );
