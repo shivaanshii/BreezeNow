@@ -47,3 +47,144 @@ input:active, input:focus {
   transform: scale(1.1);
   transition: all 0.3s ease;
 }
+
+.advisory-section {
+  width: 100%;
+  margin-top: 80px;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.advisory-topline {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 35px;
+}
+
+.advisory-topline p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+  letter-spacing: 5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.advisory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.advisory-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1.2;
+}
+
+.advisory-header p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.advisory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+.advisory-card {
+  position: relative;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+
+  border-radius: 28px;
+  padding: 30px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  display: flex;
+  gap: 22px;
+
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.advisory-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,0.12);
+}
+
+.advisory-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+}
+
+.advisory-card.yellow::before {
+  background: #facc15;
+}
+
+.advisory-card.blue::before {
+  background: #60a5fa;
+}
+
+.advisory-card.green::before {
+  background: #34d399;
+}
+
+.advisory-card.purple::before {
+  background: #c084fc;
+}
+
+.advisory-card.cyan::before {
+  background: #22d3ee;
+}
+
+.advisory-card.gray::before {
+  background: #9ca3af;
+}
+
+.advisory-icon {
+  min-width: 74px;
+  height: 74px;
+
+  border-radius: 20px;
+
+  background: rgba(255,255,255,0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2rem;
+}
+
+.advisory-content h3 {
+  color: white;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.advisory-content p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+}
