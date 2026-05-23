@@ -6,6 +6,12 @@ import { BackToTop } from "./components/BackToTop";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { Hero } from "./components/Hero";
 import { ThemeToggle } from "./components/ThemeToggle";
+import {
+  formatTemperature,
+  formatWindSpeed,
+  formatPressure,
+  validateWeatherData,
+} from "./utils/weatherUtils";
 
 function App() {
   const [city, setCity] = useState(() => {
@@ -149,6 +155,13 @@ function App() {
         }
         setError(null);
         const data = await response.json();
+
+        // Validate weather data
+        if (!validateWeatherData(data)) {
+          setError("Invalid weather data received");
+          setWeatherData(null);
+          return;
+        }
 
         setWeatherData(data);
         setForecastData(data.forecast?.forecastday || []);
@@ -473,8 +486,13 @@ function App() {
               {cityName} weather at a glance
             </h2>
           </div>
-          <button onClick={toggleUnit} className="unit-switch" >
-            Switch to {isCelsius ? "°F" : "°C"}
+          <button 
+            onClick={toggleUnit} 
+            className="unit-switch"
+            title={`Switch to ${isCelsius ? "Fahrenheit" : "Celsius"}`}
+            aria-label={`Switch to ${isCelsius ? "Fahrenheit" : "Celsius"}`}
+          >
+            {isCelsius ? "°C" : "°F"} / Switch to {isCelsius ? "°F" : "°C"}
           </button>
         </div>
 
@@ -532,13 +550,13 @@ function App() {
         <div className="weather-summary-grid">
           <Card
             badge="Temperature"
-            title={`${weather.temperature}${unit}`}
+            title={formatTemperature(weather.temperature, isCelsius)}
             text="Live temperature from WeatherAPI."
             subtle
           />
           <Card
             badge="Wind"
-            title={`${weather.windSpeed} KPH`}
+            title={formatWindSpeed(weather.windSpeed, isCelsius)}
             text="Wind speed and air movement."
             subtle
           />
@@ -550,13 +568,13 @@ function App() {
           />
           <Card
             badge="Pressure"
-            title={`${weather.pressure} mb`}
+            title={formatPressure(weather.pressure, isCelsius)}
             text="Barometric pressure reading."
             subtle
           />
           <Card
             badge="Dew point"
-            title={`${weather.moisture}${unit}`}
+            title={formatTemperature(weather.moisture, isCelsius)}
             text="Perceived moisture point."
             subtle
           />
