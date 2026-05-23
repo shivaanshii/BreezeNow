@@ -22,6 +22,12 @@ function App() {
     const saved = localStorage.getItem("recentSearches");
     return saved ? JSON.parse(saved) : [];
   });
+  const [favoriteCities, setFavoriteCities] = useState(() => {
+  const saved = localStorage.getItem("favoriteCities");
+  return saved ? JSON.parse(saved) : [];
+  });
+
+const [activeTab, setActiveTab] = useState("weather");
   const [backgroundClass, setBackgroundClass] = useState(
     "bg-gradient-to-br from-blue-900 to-blue-600",
   );
@@ -55,6 +61,13 @@ function App() {
   useEffect(() => {
     localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
   }, [recentSearches]);
+
+  useEffect(() => {
+  localStorage.setItem(
+    "favoriteCities",
+    JSON.stringify(favoriteCities),
+  );
+  }, [favoriteCities]);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -252,6 +265,55 @@ function App() {
   const handleChange = (e) => {
     setCityInfo(e.target.value);
   };
+  const isCitySaved = (cityName) => {
+  return favoriteCities.some(
+    (city) =>
+      city.name.toLowerCase() === cityName.toLowerCase(),
+  );
+};
+
+const saveCity = () => {
+  if (!weatherData) return;
+
+  const cityPayload = {
+    name: weatherData.location.name,
+    region: weatherData.location.region,
+    country: weatherData.location.country,
+    temp: isCelsius
+      ? weatherData.current.temp_c
+      : weatherData.current.temp_f,
+    condition: weatherData.current.condition.text,
+    icon: weatherData.current.condition.icon,
+  };
+
+  setFavoriteCities((prev) => {
+    const exists = prev.some(
+      (city) =>
+        city.name.toLowerCase() ===
+        cityPayload.name.toLowerCase(),
+    );
+
+    if (exists) return prev;
+
+    return [cityPayload, ...prev];
+  });
+};
+
+const removeCity = (cityName) => {
+  setFavoriteCities((prev) =>
+    prev.filter(
+      (city) =>
+        city.name.toLowerCase() !==
+        cityName.toLowerCase(),
+    ),
+  );
+};
+
+const loadFavoriteCity = (cityName) => {
+  setCity(cityName);
+  setCityInfo(cityName);
+  setActiveTab("weather");
+};
   const getWeatherInsights = () => {
     const insights = [];
 
@@ -397,7 +459,7 @@ function App() {
           <div>
             <p className="section-kicker">Live Weather</p>
             <h2 className="text-3xl font-black tracking-tight m-0 text-current">
-              Patna weather at a glance
+              {cityName} weather at a glance
             </h2>
           </div>
           <button onClick={toggleUnit} className="unit-switch">
@@ -438,8 +500,21 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-chip">
-            Lat {weather.latitude} / Lon {weather.longitude}
+          <div className="weather-side-actions">
+            <div className="hero-chip">
+              Lat {weather.latitude} / Lon {weather.longitude}
+            </div>
+
+            <button
+              onClick={saveCity}
+              className={`save-city-button ${
+                isCitySaved(cityName) ? "saved" : ""
+              }`}
+            >
+              {isCitySaved(cityName)
+                ? "Saved"
+                : "☆ Add city to favorites"}
+            </button>
           </div>
         </div>
 
@@ -488,8 +563,7 @@ function App() {
               <p className="section-kicker">Daily guidance</p>
               <h2>What to keep in mind today</h2>
               <p>
-                Short, practical advice based on the live weather conditions in
-                Patna.
+                Short, practical advice based on the live weather conditions in {cityName}.
               </p>
             </div>
 
@@ -584,6 +658,12 @@ function App() {
           </a>
 
           <div className="topbar-actions">
+            <button
+              className="ghost-link"
+              onClick={() => setActiveTab("favorites")}
+            >
+             ☆ Favorites
+            </button>
             <a className="ghost-link" href="#weather">
               Weather
             </a>
@@ -790,6 +870,96 @@ function App() {
             </div>
           )}
         </section>
+{activeTab === "favorites" && (
+  <div className="favorites-modal-overlay">
+  <div className="favorites-modal">
+    <div className="favorites-header">
+      <div>
+        <p className="section-kicker">Starred cities</p>
+        <h2>Your saved locations</h2>
+      </div>
+
+      {favoriteCities.length > 0 && (
+        <span className="favorites-helper">
+          Tap a card to load
+        </span>
+      )}
+      <button
+  className="favorites-close"
+  onClick={() => setActiveTab("weather")}
+>
+  ✕
+</button>
+    </div>
+
+    {favoriteCities.length === 0 ? (
+      <div className="favorites-empty">
+        <div className="favorites-empty-icon">
+          ☆
+        </div>
+
+        <h3>No starred cities yet</h3>
+
+        <p>
+          Search for a city and tap "Save city"
+          to add it here for quick access.
+        </p>
+      </div>
+    ) : (
+      <div className="favorites-grid">
+        {favoriteCities.map((cityCard) => (
+          <div
+            key={cityCard.name}
+            className={`favorite-card ${
+              cityCard.name === weatherData?.location?.name
+                ? "active"
+                : ""
+            }`}
+            onClick={() =>
+              loadFavoriteCity(cityCard.name)
+            }
+          >
+            <button
+              className="favorite-remove"
+              onClick={(e) => {
+                e.stopPropagation();
+                removeCity(cityCard.name);
+              }}
+            >
+              × Remove
+            </button>
+
+            <div className="favorite-card-top">
+              <h3>{cityCard.name}</h3>
+
+              <p>
+                {cityCard.region},{" "}
+                {cityCard.country}
+              </p>
+            </div>
+
+            <div className="favorite-weather">
+              <span>{cityCard.condition}</span>
+
+              <strong>
+                {cityCard.temp}
+                {isCelsius ? "°C" : "°F"}
+              </strong>
+            </div>
+
+            {cityCard.name ===
+              weatherData?.location?.name && (
+              <div className="favorite-active">
+                Active
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+    </div>
+</div>
+)}
 
         {error ? (
           <div className="weather-alert">{error}</div>
