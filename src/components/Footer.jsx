@@ -1,10 +1,20 @@
-import { createLucideIcon } from "lucide-react";
-
-const GitHubMark = createLucideIcon("GitHubMark", [
-  ["rect", { x: "4", y: "4", width: "16", height: "16", rx: "5" }],
-  ["path", { d: "M10 9 7 12l3 3" }],
-  ["path", { d: "M14 9l3 3-3 3" }],
-]);
+const GitHubMark = ({ className, ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+    {...props}
+  >
+    <rect x="4" y="4" width="16" height="16" rx="5" />
+    <path d="M10 9 L7 12 L10 15" />
+    <path d="M14 9 L17 12 L14 15" />
+  </svg>
+);
 
 const socialLinks = [
   {
