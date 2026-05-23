@@ -8,8 +8,12 @@ import { Hero } from "./components/Hero";
 import { ThemeToggle } from "./components/ThemeToggle";
 
 function App() {
-  const [city, setCity] = useState("Patna");
-  const [cityInfo, setCityInfo] = useState("Patna");
+  const [city, setCity] = useState(() => {
+    return localStorage.getItem("selectedCity") || "Patna";
+  });
+  const [cityInfo, setCityInfo] = useState(() => {
+    return localStorage.getItem("selectedCityInfo") || "Patna";
+  });
   const [weatherData, setWeatherData] = useState(null);
   const [forecastData, setForecastData] = useState(null);
   const [error, setError] = useState(null);
@@ -23,11 +27,11 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [favoriteCities, setFavoriteCities] = useState(() => {
-  const saved = localStorage.getItem("favoriteCities");
-  return saved ? JSON.parse(saved) : [];
+    const saved = localStorage.getItem("favoriteCities");
+    return saved ? JSON.parse(saved) : [];
   });
 
-const [activeTab, setActiveTab] = useState("weather");
+  const [activeTab, setActiveTab] = useState("weather");
   const [backgroundClass, setBackgroundClass] = useState(
     "bg-gradient-to-br from-blue-900 to-blue-600",
   );
@@ -63,10 +67,15 @@ const [activeTab, setActiveTab] = useState("weather");
   }, [recentSearches]);
 
   useEffect(() => {
-  localStorage.setItem(
-    "favoriteCities",
-    JSON.stringify(favoriteCities),
-  );
+    localStorage.setItem("selectedCity", city);
+  }, [city]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedCityInfo", cityInfo);
+  }, [cityInfo]);
+
+  useEffect(() => {
+    localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
   }, [favoriteCities]);
 
   useEffect(() => {
@@ -265,55 +274,57 @@ const [activeTab, setActiveTab] = useState("weather");
   const handleChange = (e) => {
     setCityInfo(e.target.value);
   };
+
   const isCitySaved = (cityName) => {
-  return favoriteCities.some(
-    (city) =>
-      city.name.toLowerCase() === cityName.toLowerCase(),
-  );
-};
-
-const saveCity = () => {
-  if (!weatherData) return;
-
-  const cityPayload = {
-    name: weatherData.location.name,
-    region: weatherData.location.region,
-    country: weatherData.location.country,
-    temp: isCelsius
-      ? weatherData.current.temp_c
-      : weatherData.current.temp_f,
-    condition: weatherData.current.condition.text,
-    icon: weatherData.current.condition.icon,
+    return favoriteCities.some(
+      (city) =>
+        city.name.toLowerCase() === cityName.toLowerCase(),
+    );
   };
 
-  setFavoriteCities((prev) => {
-    const exists = prev.some(
-      (city) =>
-        city.name.toLowerCase() ===
-        cityPayload.name.toLowerCase(),
+  const saveCity = () => {
+    if (!weatherData) return;
+
+    const cityPayload = {
+      name: weatherData.location.name,
+      region: weatherData.location.region,
+      country: weatherData.location.country,
+      temp: isCelsius
+        ? weatherData.current.temp_c
+        : weatherData.current.temp_f,
+      condition: weatherData.current.condition.text,
+      icon: weatherData.current.condition.icon,
+    };
+
+    setFavoriteCities((prev) => {
+      const exists = prev.some(
+        (city) =>
+          city.name.toLowerCase() ===
+          cityPayload.name.toLowerCase(),
+      );
+
+      if (exists) return prev;
+
+      return [cityPayload, ...prev];
+    });
+  };
+
+  const removeCity = (cityName) => {
+    setFavoriteCities((prev) =>
+      prev.filter(
+        (city) =>
+          city.name.toLowerCase() !==
+          cityName.toLowerCase(),
+      ),
     );
+  };
 
-    if (exists) return prev;
+  const loadFavoriteCity = (cityName) => {
+    setCity(cityName);
+    setCityInfo(cityName);
+    setActiveTab("weather");
+  };
 
-    return [cityPayload, ...prev];
-  });
-};
-
-const removeCity = (cityName) => {
-  setFavoriteCities((prev) =>
-    prev.filter(
-      (city) =>
-        city.name.toLowerCase() !==
-        cityName.toLowerCase(),
-    ),
-  );
-};
-
-const loadFavoriteCity = (cityName) => {
-  setCity(cityName);
-  setCityInfo(cityName);
-  setActiveTab("weather");
-};
   const getWeatherInsights = () => {
     const insights = [];
 
