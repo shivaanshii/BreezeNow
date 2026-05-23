@@ -400,7 +400,7 @@ function App() {
               Patna weather at a glance
             </h2>
           </div>
-          <button onClick={toggleUnit} className="unit-switch">
+          <button onClick={toggleUnit} className="unit-switch" >
             Switch to {isCelsius ? "°F" : "°C"}
           </button>
         </div>
@@ -508,7 +508,7 @@ function App() {
         )}
 
         {forecastData && forecastData.length > 0 && (
-          <section className="section-block compact weather-metrics-grid">
+          <section className="section-block compact weather-metrics-grid" id="forecast">
             <div className="section-heading align-start">
               <p className="section-kicker">Forecast</p>
               <h2>3-day outlook</h2>
@@ -681,7 +681,7 @@ function App() {
           </div>
         </Hero>
 
-        <section className="section-block" id="weather">
+        <section className="section-block">
           <div className="section-heading">
             <p className="section-kicker">Why it feels premium</p>
             <h2>Focused weather cards instead of a cluttered dashboard.</h2>
@@ -715,7 +715,7 @@ function App() {
           </FeaturesGrid>
         </section>
 
-        <section className="section-block compact">
+        <section className="section-block compact" id="weather">
           <div className="section-heading align-start">
             <p className="section-kicker">Search</p>
             <h2>Check a location in one line.</h2>
@@ -793,7 +793,7 @@ function App() {
 
         {error ? (
           <div className="weather-alert">{error}</div>
-        ) : (
+        ) : (   
           <WeatherDetail />
         )}
       </div>

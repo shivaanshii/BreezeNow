@@ -10,6 +10,10 @@
   }
 }
 
+#weather {
+  scroll-margin-top: 80px;
+}
+
 @keyframes glow-pulse {
   0%,
   100% {
