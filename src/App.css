@@ -465,20 +465,23 @@
 .hero-device-metrics article {
   padding: 18px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.5);
+  background: #1e293b;
   border: 1px solid var(--border);
 }
 
 .hero-device-metrics strong {
   font-size: 2rem;
   letter-spacing: -0.06em;
+  color: white;  
+  font-weight: 800;
 }
 
 .hero-device-metrics span {
   margin-top: 6px;
-  color: var(--muted);
-  font-size: 0.9rem;
+  color: #cbd5e1 !important;   /* darker secondary text */
+  font-size: 0.95rem;
   line-height: 1.4;
+  font-weight: 600;;
 }
 
 .hero-device-footer {
@@ -758,6 +761,10 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--border);
+}
+:root[data-theme="dark"] .landing-stat-row article {
+  background: #1e293b; /* Dark theme only */
+  border: 1px solid #334155;
 }
 
 .landing-stat-row strong {
