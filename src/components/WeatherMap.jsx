@@ -24,7 +24,10 @@ export default function WeatherMap({ weatherData, isCelsius, apiKey, theme, onSe
         center: [initialLat, initialLon],
         zoom: 9,
         zoomControl: false,
-        attributionControl: true
+        attributionControl: true,
+        zoomSnap: 0.5,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 60
       });
 
       // Position standard Zoom control nicely on the bottom right
@@ -63,8 +66,9 @@ export default function WeatherMap({ weatherData, isCelsius, apiKey, theme, onSe
 
     L.tileLayer(tileUrl, {
       attribution,
-      maxZoom: 18,
-      subdomains: "abcd"
+      maxZoom: 20,
+      subdomains: "abcd",
+      detectRetina: true
     }).addTo(mapInstance.current);
   }, [theme]);
 
