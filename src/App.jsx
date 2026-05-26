@@ -6,6 +6,7 @@ import { BackToTop } from "./components/BackToTop";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { Hero } from "./components/Hero";
 import { ThemeToggle } from "./components/ThemeToggle";
+import WeatherMap from "./components/WeatherMap";
 import {
   formatTemperature,
   formatWindSpeed,
@@ -678,7 +679,12 @@ function App() {
       <BackToTop />
       <div className="page-shell">
         <header className="topbar">
-          <a className="brand" href="#top" aria-label="BreezeNow home">
+          <a 
+            className="brand" 
+            href="#top" 
+            aria-label="BreezeNow home"
+            onClick={() => setActiveTab("weather")}
+          >
             <img src={Logo} alt="BreezeNow" className="brand-mark" />
             <span>
               BreezeNow
@@ -688,17 +694,29 @@ function App() {
 
           <div className="topbar-actions">
             <button
-              className="ghost-link"
+              className={`ghost-link ${activeTab === "favorites" ? "active" : ""}`}
               onClick={() => setActiveTab("favorites")}
             >
              ☆ Favorites
             </button>
-            <a className="ghost-link" href="#weather">
-              Weather
-            </a>
-            <a className="ghost-link" href="#forecast">
-              Forecast
-            </a>
+            <button
+              className={`ghost-link ${activeTab === "weather" ? "active" : ""}`}
+              onClick={() => {
+                setActiveTab("weather");
+                window.location.hash = "#weather";
+              }}
+            >
+              Live Weather
+            </button>
+            <button
+              className={`ghost-link ${activeTab === "map" ? "active" : ""}`}
+              onClick={() => {
+                setActiveTab("map");
+                window.location.hash = "#weather";
+              }}
+            >
+              🗺️ Weather Map
+            </button>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
           </div>
         </header>
@@ -993,7 +1011,19 @@ function App() {
 </div>
 )}
 
-        {error ? (
+        {activeTab === "map" ? (
+          <WeatherMap
+            weatherData={weatherData}
+            isCelsius={isCelsius}
+            apiKey={import.meta.env.VITE_WEATHER_API_KEY}
+            theme={theme}
+            onSelectLocation={(newCity) => {
+              setCity(newCity);
+              setCityInfo(newCity);
+              setActiveTab("weather");
+            }}
+          />
+        ) : error ? (
           <div className="weather-alert">{error}</div>
         ) : (   
           <WeatherDetail />
