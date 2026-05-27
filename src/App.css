@@ -87,6 +87,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .ghost-link {
@@ -485,7 +486,7 @@
   color: #cbd5e1 !important;   /* darker secondary text */
   font-size: 0.95rem;
   line-height: 1.4;
-  font-weight: 600;;
+  font-weight: 600;
 }
 
 .hero-device-footer {
@@ -799,14 +800,21 @@
 .weather-search {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
   margin-top: 26px;
+  padding: 20px 24px;
+  border-radius: 22px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .weather-search-input {
   flex: 1 1 220px;
-  min-height: 52px;
+  min-height: 120px;
+  font-weight: 700;
+  font-size: 1.5rem;
   padding: 0 18px;
   border-radius: 16px;
   border: 1px solid var(--border);
@@ -1047,6 +1055,10 @@
   .forecast-grid {
     grid-template-columns: 1fr;
   }
+
+  .weather-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -1063,11 +1075,13 @@
 
   .topbar-actions {
     width: 100%;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
   }
 
   .ghost-link {
-    padding-left: 0;
+    padding: 8px 12px;
   }
 
   .hero-section {
@@ -1131,6 +1145,138 @@
   .cta-band h2 {
     max-width: none;
   }
+
+  .weather-current-panel {
+    flex-direction: column;
+  }
+  .weather-current-panel .weather-current-temp {
+    min-width: unset;
+    width: 100%;
+  }
+  .weather-summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .favorite-remove {
+    opacity: 1;
+    transform: translateY(0);
+    position: static;
+    margin-top: 14px;
+    width: 100%;
+    text-align: center;
+  }
+  .weather-search .weather-search-wrapper {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+    .favorites-modal-overlay {
+    padding: 12px;
+    align-items: flex-start;
+    padding-top: 72px;
+  }
+
+  .favorites-empty {
+    padding: 40px 16px;
+  }
+
+  .favorites-empty h3 {
+    font-size: 1.4rem;
+  }
+
+  .favorites-empty-icon {
+    font-size: 2.4rem;
+  }
+
+  .topbar .theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .favorites-modal {
+    position: relative;
+  }
+
+  .favorites-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
+
+  .favorites-header {
+    padding-right: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-device-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-art {
+    min-height: 380px;
+  }
+
+  .theme-toggle-label {
+    display: none;
+  }
+
+  .hero-section h1 {
+    font-size: clamp(2.2rem, 8vw, 3rem);
+  }
+
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+    justify-content: center;
+  }
+    .favorites-modal {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .favorites-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .favorites-close {
+    top: 20px;
+    right: 20px;
+  }
+  
+  .favorites-header {
+    padding-right: 46px;
+  }
+
+  .favorites-helper {
+    display: none;
+  }
+    .favorites-modal-overlay {
+    padding: 6px;
+    padding-top: 16px;
+  }
+
+  .favorites-empty {
+    padding: 32px 14px;
+  }
+
+  .favorites-empty h3 {
+    font-size: 1.2rem;
+  }
+
+  .favorites-empty p {
+    font-size: 0.92rem;
+  }
+
+  .favorites-close {
+    width: 36px;
+    height: 36px;
+    font-size: 0.88rem;
+  }
+
 }
 
 .weather-side-actions {
@@ -1367,6 +1513,61 @@
   max-width: 48ch;
   margin: 0 auto;
   line-height: 1.7;
+}
+
+.weather-search-wrapper {
+  position: relative;
+  flex: 1 1 400px;
+}
+
+.weather-search-wrapper .weather-search-input {
+  width: 100%;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  background: var(--surface-strong);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  z-index: 50;
+  border: 1px solid var(--border);
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 180ms ease;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: rgba(242, 138, 43, 0.1);
+}
+
+.suggestion-name {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.suggestion-region {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.weather-device-brand > div {
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 900px) {
