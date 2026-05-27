@@ -6,6 +6,8 @@ import { BackToTop } from "./components/BackToTop";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { Hero } from "./components/Hero";
 import { ThemeToggle } from "./components/ThemeToggle";
+
+import { WeatherCharts } from "./components/WeatherCharts";
 import {
   formatTemperature,
   formatWindSpeed,
@@ -467,6 +469,30 @@ function App() {
     );
   };
 
+  const WeatherChart = () => {
+    const [weather, setWeather] = useState(null);
+
+    const getWeather = async (city) => {
+      const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=7&aqi=no&alerts=no`
+      );
+
+      const data = await response.json();
+      setWeather(data);
+    };
+    useEffect(() => {if (city) {getWeather(city);}}, [city]);
+    return (
+      <div>
+        {weather && weather.forecast && (
+        <WeatherCharts
+          forecastData={weather.forecast.forecastday}
+        />
+      )}
+      </div>
+    );
+  }
+
   const WeatherDetail = () => {
     if (!weatherData) return null;
     const { current, location } = weatherData;
@@ -585,7 +611,9 @@ function App() {
             subtle
           />
         </div>
-
+        <div>
+          <WeatherChart/>
+        </div>
         {insights.length > 0 && (
           <section className="section-block compact">
             <div className="section-heading align-start">
