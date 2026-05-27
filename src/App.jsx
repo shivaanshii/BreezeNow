@@ -578,7 +578,6 @@ function App() {
         <div className="weather-summary-grid">
           <Card
             badge="Temperature"
-<<<<<<< HEAD
 title={
   !weatherData ? (
     <Skeleton className="h-8 w-24" />
@@ -586,15 +585,11 @@ title={
     `${weather.temperature}${unit}`
   )
 }
-=======
-            title={formatTemperature(weather.temperature, isCelsius)}
->>>>>>> 6aec4c5b63cd17cd5647c33e693fcd1bb5391a78
             text="Live temperature from WeatherAPI."
             subtle
           />
           <Card
             badge="Wind"
-<<<<<<< HEAD
 title={
   !weatherData ? (
     <Skeleton className="h-8 w-24" />
@@ -602,9 +597,7 @@ title={
     `${weather.windSpeed} KPH`
   )
 }
-=======
-            title={formatWindSpeed(weather.windSpeed, isCelsius)}
->>>>>>> 6aec4c5b63cd17cd5647c33e693fcd1bb5391a78
+            
             text="Wind speed and air movement."
             subtle
           />
@@ -622,7 +615,6 @@ title={
           />
           <Card
             badge="Pressure"
-<<<<<<< HEAD
 title={
   !weatherData ? (
     <Skeleton className="h-8 w-24" />
@@ -630,15 +622,12 @@ title={
     `${weather.pressure} mb`
   )
 }
-=======
-            title={formatPressure(weather.pressure, isCelsius)}
->>>>>>> 6aec4c5b63cd17cd5647c33e693fcd1bb5391a78
+            
             text="Barometric pressure reading."
             subtle
           />
           <Card
             badge="Dew point"
-<<<<<<< HEAD
 title={
   !weatherData ? (
     <Skeleton className="h-8 w-24" />
@@ -646,9 +635,6 @@ title={
     `${weather.moisture}${unit}`
   )
 }
-=======
-            title={formatTemperature(weather.moisture, isCelsius)}
->>>>>>> 6aec4c5b63cd17cd5647c33e693fcd1bb5391a78
             text="Perceived moisture point."
             subtle
           />
