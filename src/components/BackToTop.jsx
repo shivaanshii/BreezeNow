@@ -2,21 +2,27 @@ import { useEffect, useState } from "react";
 
 export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      setIsVisible(window.scrollY > 400);
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? scrollTop / docHeight : 0);
+      setIsVisible(scrollTop > 400);
     };
 
-    toggleVisibility();
-    window.addEventListener("scroll", toggleVisibility, { passive: true });
-
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const progressDeg = Math.round(scrollProgress * 360);
 
   return (
     <button
@@ -26,9 +32,12 @@ export function BackToTop() {
       aria-label="Back to top"
       aria-hidden={!isVisible}
       tabIndex={isVisible ? 0 : -1}
+      style={{
+        "--progress-deg": `${progressDeg}deg`,
+      }}
     >
-      <span aria-hidden="true">↑</span>
-      <span>Top</span>
+      <span className="btt-arrow" aria-hidden="true">↑</span>
+      <span className="btt-label">Top</span>
     </button>
   );
 }
