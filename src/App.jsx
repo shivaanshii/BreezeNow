@@ -1,3 +1,4 @@
+import Skeleton from "./components/Skeleton";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Logo from "./assets/Logo.png";
@@ -568,37 +569,75 @@ function App() {
         <div className="weather-summary-grid">
           <Card
             badge="Temperature"
-            title={formatTemperature(weather.temperature, isCelsius)}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.temperature}${unit}`
+  )
+}
             text="Live temperature from WeatherAPI."
             subtle
           />
           <Card
             badge="Wind"
-            title={formatWindSpeed(weather.windSpeed, isCelsius)}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.windSpeed} KPH`
+  )
+}
+            
             text="Wind speed and air movement."
             subtle
           />
           <Card
             badge="Humidity"
-            title={`${weather.humidity}%`}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.humidity}%`
+  )
+}
             text="Moisture in the air right now."
             subtle
           />
           <Card
             badge="Pressure"
-            title={formatPressure(weather.pressure, isCelsius)}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.pressure} mb`
+  )
+}
+            
             text="Barometric pressure reading."
             subtle
           />
           <Card
             badge="Dew point"
-            title={formatTemperature(weather.moisture, isCelsius)}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.moisture}${unit}`
+  )
+}
             text="Perceived moisture point."
             subtle
           />
           <Card
             badge="UV index"
-            title={`${weather.uv}`}
+title={
+  !weatherData ? (
+    <Skeleton className="h-8 w-24" />
+  ) : (
+    `${weather.uv}`
+  )
+}
             text="UV exposure guidance for the day."
             subtle
           />
@@ -781,34 +820,63 @@ function App() {
                 </div>
               </div>
 
-              <div className="landing-stat-row">
-                <article>
-                  <strong>
-                    {heroWeather.temperature}
-                    {isCelsius ? "°C" : "°F"}
-                  </strong>
-                  <span>
-                    Feels like {heroWeather.feelsLike}
-                    {isCelsius ? "°C" : "°F"}
-                  </span>
-                </article>
-                <article>
-                  <strong>{heroWeather.humidity}%</strong>
-                  <span>Humidity and visibility snapshot</span>
-                </article>
-                <article>
-                  <strong>{heroWeather.windSpeed} KPH</strong>
-                  <span>Wind speed right now</span>
-                </article>
-                <article>
-                  <strong>
-                    {weatherData
-                      ? weatherData.forecast?.forecastday?.length || 0
-                      : 3}
-                  </strong>
-                  <span>Forecast days ready</span>
-                </article>
-              </div>
+             <div className="landing-stat-row">
+  <article>
+    <strong>
+      {!weatherData ? (
+        <Skeleton className="h-8 w-24" />
+      ) : (
+        <>
+          {heroWeather.temperature}
+          {isCelsius ? "°C" : "°F"}
+        </>
+      )}
+    </strong>
+    <span>
+      {!weatherData ? (
+        <Skeleton className="h-4 w-24" />
+      ) : (
+        <>
+          Feels like {heroWeather.feelsLike}
+          {isCelsius ? "°C" : "°F"}
+        </>
+      )}
+    </span>
+  </article>
+
+  <article>
+    <strong>
+      {!weatherData ? (
+        <Skeleton className="h-8 w-20" />
+      ) : (
+        `${heroWeather.humidity}%`
+      )}
+    </strong>
+    <span>Humidity and visibility snapshot</span>
+  </article>
+
+  <article>
+    <strong>
+      {!weatherData ? (
+        <Skeleton className="h-8 w-24" />
+      ) : (
+        `${heroWeather.windSpeed} KPH`
+      )}
+    </strong>
+    <span>Wind speed right now</span>
+  </article>
+
+  <article>
+    <strong>
+      {!weatherData ? (
+        <Skeleton className="h-8 w-10" />
+      ) : (
+        weatherData.forecast?.forecastday?.length || 0
+      )}
+    </strong>
+    <span>Forecast days ready</span>
+  </article>
+</div>
 
               <div className="hero-device-footer" aria-hidden="true">
                 <span />
