@@ -10,13 +10,14 @@
  */
 export const convertTemperature = (temp, toCelsius = true) => {
   if (!Number.isFinite(temp)) return temp;
-  
+
   if (toCelsius) {
     // Fahrenheit to Celsius: (F - 32) × 5/9
     return Math.round(((temp - 32) * 5) / 9 * 10) / 10;
   } else {
     // Celsius to Fahrenheit: (C × 9/5) + 32
-    return Math.round((temp * 9) / 5 + 32 * 10) / 10;
+    const fahrenheit = (temp * 9) / 5 + 32;
+    return Math.round(fahrenheit * 10) / 10;
   }
 };
 
