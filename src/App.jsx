@@ -9,7 +9,7 @@ import { Footer } from "./components/Footer";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { Hero } from "./components/Hero";
 import { ThemeToggle } from "./components/ThemeToggle";
-
+import WeatherMap from "./components/WeatherMap";
 import { WeatherCharts } from "./components/WeatherCharts";
 import {
   formatTemperature,
@@ -475,6 +475,7 @@ function App() {
       const data = await response.json();
       setWeather(data);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {if (city) {getWeather(city);}}, [city]);
     return (
       <div>
@@ -675,6 +676,20 @@ title={
           </section>
         )}
 
+        <section className="section-block compact" id="map">
+          <WeatherMap
+            weatherData={weatherData}
+            isCelsius={isCelsius}
+            apiKey={import.meta.env.VITE_WEATHER_API_KEY}
+            theme={theme}
+            onSelectLocation={(newCity) => {
+              setCity(newCity);
+              setCityInfo(newCity);
+              window.location.hash = "#top";
+            }}
+          />
+        </section>
+
         {forecastData && forecastData.length > 0 && (
           <section
             className="section-block compact weather-metrics-grid"
@@ -746,7 +761,12 @@ title={
       <BackToTop />
       <div className="page-shell">
         <header className="topbar">
-          <a className="brand" href="#top" aria-label="BreezeNow home">
+          <a 
+            className="brand" 
+            href="#top" 
+            aria-label="BreezeNow home"
+            onClick={() => setActiveTab("weather")}
+          >
             <img src={Logo} alt="BreezeNow" className="brand-mark" />
             <span>
               BreezeNow
@@ -756,15 +776,30 @@ title={
 
           <div className="topbar-actions">
             <button
-              className="ghost-link"
+              className={`ghost-link ${activeTab === "favorites" ? "active" : ""}`}
               onClick={() => setActiveTab("favorites")}
             >
               ☆ Favorites
             </button>
-            <a className="ghost-link" href="#weather">
+            <a 
+              className="ghost-link" 
+              href="#weather"
+              onClick={() => setActiveTab("weather")}
+            >
               Weather
             </a>
-            <a className="ghost-link" href="#forecast">
+            <a 
+              className="ghost-link" 
+              href="#map"
+              onClick={() => setActiveTab("weather")}
+            >
+              Weather Map
+            </a>
+            <a 
+              className="ghost-link" 
+              href="#forecast"
+              onClick={() => setActiveTab("weather")}
+            >
               Forecast
             </a>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
